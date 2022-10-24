@@ -1,4 +1,3 @@
-from traitlets import default
 from config import get_arguments
 from SinGAN.manipulate import *
 from SinGAN.training import *
@@ -23,7 +22,7 @@ if __name__ == '__main__':
         print('trained model already exist')
     else:
         try:
-            os.makefdirs(dir2save)
+            os.makedirs(dir2save)
         except OSError:
             pass
         real = functions.read_image(opt)
