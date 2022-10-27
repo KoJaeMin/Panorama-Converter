@@ -1,0 +1,24 @@
+main{
+    text-align:center;
+}
+
+main > .container {
+	display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+}
+
+#info{
+    width: 90%;
+    margin: 10px auto;
+    height : 30px;
+    display: flex;
+}
+
+#info > button{
+    width: 70px;
+}
+
+#parameter{
+    padding-top: 30px;
+    padding-left: 20px;
+}
