@@ -1,5 +1,5 @@
 const image_drop_area = document.querySelector("#image_drop_area");
-var uploaded_image;
+var uploaded_image = 'none';
 
 image_drop_area.addEventListener('dragover', (event) => {
     event.stopPropagation();
@@ -51,7 +51,8 @@ const upload = ()=>{
     let button = document.getElementById('file-input');
     button.addEventListener("change",(event)=>{
         let [file] = event.currentTarget.files;
-        check(file);
+        if(file!==undefined)
+            check(file);
     })
     button.click();
 }
@@ -59,12 +60,9 @@ const upload = ()=>{
 const check = (file)=>{
     if(file.type.includes('image')){
         let file_name = document.querySelector(".file_name");
-        if(file_name.childElementCount == 0)
-            add_box(file_name,file.name);
-        else{
-            remove_box(file_name)
-            add_box(file_name,file.name);
-        }
+        if(file_name.childElementCount !== 0)
+            remove_box(file_name);
+        add_box(file_name,file.name);
         readImage(file);
     }
     else
@@ -72,6 +70,7 @@ const check = (file)=>{
 }
 
 const reset = (node)=>{
-    document.querySelector("#image_drop_area").style.backgroundImage = 'none';
+    uploaded_image = 'none'
+    document.querySelector("#image_drop_area").style.backgroundImage = uploaded_image;
     remove_box(document.querySelector(".file_name"))
 }
