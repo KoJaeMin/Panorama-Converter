@@ -1,5 +1,5 @@
 import argparse
-
+from datetime import datetime
 
 def get_arguments():
     parser = argparse.ArgumentParser()
@@ -14,6 +14,7 @@ def get_arguments():
     parser.add_argument('--nc_z',type=int,help='noise # channels',default=3)
     parser.add_argument('--nc_im',type=int,help='image # channels',default=3)
     parser.add_argument('--out',help='output folder',default='/local_datasets/singan/Output')
+    parser.add_argument('--name',help='username',default=datetime.today().strftime("%Y_%m_%d_%H"))
         
     #networks hyper parameters:
     parser.add_argument('--nfc', type=int, default=32)
