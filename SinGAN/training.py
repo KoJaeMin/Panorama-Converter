@@ -90,7 +90,7 @@ def train_single_scale(netD,netG,reals,Gs,Zs,in_s,NoiseAmp,opt,centers=None):
     z_opt = m_noise(z_opt)
 
     # setup optimizer
-    if opt.optimizer not in ['Adam','AdamW','Adamax','SGD','SparseAdam']:
+    if opt.optimizer not in ['Adam','AdamW','Adamax','SGD','ASGD']:
         optimizerD = optim.Adam(netD.parameters(), lr=opt.lr_d, betas=(opt.beta1, 0.999))
         optimizerG = optim.Adam(netG.parameters(), lr=opt.lr_g, betas=(opt.beta1, 0.999))
     else:
@@ -107,8 +107,8 @@ def train_single_scale(netD,netG,reals,Gs,Zs,in_s,NoiseAmp,opt,centers=None):
             optimizerD = optim.SGD(netD.parameters(), lr=opt.lr_d)
             optimizerG = optim.SGD(netG.parameters(), lr=opt.lr_g)
         else:
-            optimizerD = optim.SparseAdam(netD.parameters(), lr=opt.lr_d, betas=(opt.beta1, 0.999))
-            optimizerG = optim.SparseAdam(netG.parameters(), lr=opt.lr_g, betas=(opt.beta1, 0.999))
+            optimizerD = optim.ASGD(netD.parameters(), lr=opt.lr_d)
+            optimizerG = optim.ASGD(netG.parameters(), lr=opt.lr_g)
     schedulerD = torch.optim.lr_scheduler.MultiStepLR(optimizer=optimizerD,milestones=[1600],gamma=opt.gamma)
     schedulerG = torch.optim.lr_scheduler.MultiStepLR(optimizer=optimizerG,milestones=[1600],gamma=opt.gamma)
 
