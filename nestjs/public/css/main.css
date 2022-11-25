@@ -14,10 +14,6 @@ main > .container {
     display: flex;
 }
 
-#info > button{
-    width: 70px;
-}
-
 #parameter{
     padding-top: 30px;
     padding-left: 20px;
