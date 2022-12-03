@@ -7,6 +7,7 @@ from core.config import settings
 from api.api import api_router
 # from fastapi.responses import FileResponse
 from pydantic import BaseModel
+from fastapi.staticfiles import StaticFiles
 # from fastapi.templating import Jinja2Templates
 # from pathlib import Path
 
@@ -14,7 +15,7 @@ from pydantic import BaseModel
 # templates = Jinja2Templates(directory=str(BASE_PATH / "templates"))
 
 app = FastAPI()
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 app.include_router(api_router, prefix='')
 
