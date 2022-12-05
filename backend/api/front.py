@@ -11,4 +11,5 @@ templates = Jinja2Templates(directory=str(BASE_PATH/"frontend/templates"))
 
 @router.get("/", response_class=HTMLResponse)
 def read_root(request : Request):
-    return templates.TemplateResponse("index.html",{"request": request}) 
+    uri = '/panorama/img'
+    return templates.TemplateResponse("index.html",{"request": request, "uri" : uri}) 

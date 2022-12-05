@@ -9,13 +9,10 @@ from skimage import io as img
 from skimage import color, morphology, filters
 #from skimage import morphology
 #from skimage import filters
-from SinGAN.imresize import imresize
+from core.SinGAN.imresize import imresize
 import os
 import random
 from sklearn.cluster import KMeans
-from SinGAN.logger import custom_logger
-
-function_logger = custom_logger("function",'DEBUG')
 # custom weights initialization called on netG and netD
 
 # def read_image(opt):
@@ -265,7 +262,7 @@ def generate_dir2save(opt):
     elif opt.mode == 'random_samples':
         dir2save = '%s/RandomSamples/%s/%s/gen_start_scale=%d' % (opt.out,opt.input_name[:-4],opt.name, opt.gen_start_scale)
     elif opt.mode == 'random_samples_arbitrary_sizes':
-        dir2save = '%s/RandomSamples_ArbitrerySizes/%s/%s/scale_v=%f_scale_h=%f' % (opt.out,opt.input_name[:-4],opt.name, opt.scale_v, opt.scale_h)
+        dir2save = '%s/RandomSamples_ArbitrerySizes/%s/%s' % (opt.out,opt.input_name[:-4],opt.name)
     elif opt.mode == 'animation':
         dir2save = '%s/Animation/%s/%s' % (opt.out, opt.input_name[:-4],opt.name)
     elif opt.mode == 'SR':
@@ -288,14 +285,14 @@ def post_config(opt):
     opt.nfc_init = opt.nfc
     opt.min_nfc_init = opt.min_nfc
     opt.scale_factor_init = opt.scale_factor
-    opt.out_ = 'TrainedModels/%s/scale_factor=%f/' % (opt.input_name[:-4], opt.scale_factor)
+    opt.out_ = '%s/%s/scale_factor=%f/' % (opt.out,opt.input_name[:-4], opt.scale_factor)
     if opt.mode == 'SR':
         opt.alpha = 100
 
     if opt.manualSeed is None:
         opt.manualSeed = random.randint(1, 10000)
     print("Random Seed: ", opt.manualSeed)
-    function_logger.debug(f"Random Seed: {opt.manualSeed}" )
+    # function_logger.debug(f"Random Seed: {opt.manualSeed}" )
     random.seed(opt.manualSeed)
     torch.manual_seed(opt.manualSeed)
     if torch.cuda.is_available() and opt.not_cuda:

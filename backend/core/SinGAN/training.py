@@ -1,16 +1,16 @@
-import SinGAN.functions as functions
-import SinGAN.models as models
+import core.SinGAN.functions as functions
+import core.SinGAN.models as models
 import os
 import torch.nn as nn
 import torch.optim as optim
 import torch.utils.data
 import math
 import matplotlib.pyplot as plt
-from SinGAN.imresize import imresize
-from SinGAN.logger import custom_logger
-import time
+from core.SinGAN.imresize import imresize
+# from SinGAN.logger import custom_logger
+# import time
 
-train_logger = custom_logger("train",'DEBUG')
+# train_logger = custom_logger("train",'DEBUG')
 
 def train(opt,Gs,Zs,reals,NoiseAmp):
     real_ = functions.read_image(opt)
@@ -21,7 +21,8 @@ def train(opt,Gs,Zs,reals,NoiseAmp):
     nfc_prev = 0
 
     while scale_num<opt.stop_scale+1:
-        start = time.time()
+        # start = time.time()
+        print(scale_num)
         opt.nfc = min(opt.nfc_init * pow(2, math.floor(scale_num / 4)), 128)
         opt.min_nfc = min(opt.min_nfc_init * pow(2, math.floor(scale_num / 4)), 128)
 
@@ -58,13 +59,12 @@ def train(opt,Gs,Zs,reals,NoiseAmp):
         torch.save(NoiseAmp, '%s/NoiseAmp.pth' % (opt.out_))
 
         # print(f'scale {scale_num}:{round(time.time() - start)} s')
-        train_logger.debug(f'scale {scale_num}:{round(time.time() - start)} s')
+        # train_logger.debug(f'scale {scale_num}:{round(time.time() - start)} s')
         
 
         scale_num+=1
         nfc_prev = opt.nfc
         del D_curr,G_curr
-    return
 
 
 
@@ -222,9 +222,9 @@ def train_single_scale(netD,netG,reals,Gs,Zs,in_s,NoiseAmp,opt,centers=None):
         D_fake2plot.append(D_G_z)
         z_opt2plot.append(rec_loss)
 
-        if epoch % 25 == 0 or epoch == (opt.niter-1):
+        # if epoch % 25 == 0 or epoch == (opt.niter-1):
             # print('scale %d:[%d/%d]' % (len(Gs), epoch, opt.niter))
-            train_logger.debug('scale %d:[%d/%d]' % (len(Gs), epoch, opt.niter))
+            # train_logger.debug('scale %d:[%d/%d]' % (len(Gs), epoch, opt.niter))
 
         if epoch % 100 == 0 or epoch == (opt.niter-1):
             plt.imsave('%s/fake_sample.png' %  (opt.outf), functions.convert_image_np(fake.detach()), vmin=0, vmax=1)
@@ -339,7 +339,7 @@ def init_models(opt):
     if opt.netG != '':
         netG.load_state_dict(torch.load(opt.netG))
     # print(netG)
-    train_logger.debug(netG)
+    # train_logger.debug(netG)
 
     #discriminator initialization:
     netD = models.WDiscriminator(opt).to(opt.device)
@@ -347,6 +347,6 @@ def init_models(opt):
     if opt.netD != '':
         netD.load_state_dict(torch.load(opt.netD))
     # print(netD)
-    train_logger.debug(netD)
+    # train_logger.debug(netD)
 
     return netD, netG

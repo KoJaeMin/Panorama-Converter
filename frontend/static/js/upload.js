@@ -1,5 +1,6 @@
 const image_drop_area = document.querySelector("#image_drop_area");
 var uploaded_image = 'none';
+var upload_file;
 
 image_drop_area.addEventListener('dragover', (event) => {
     event.stopPropagation();
@@ -40,6 +41,7 @@ const remove_box = (node) => {
 
 const readImage = (file) => {
     const url = URL.createObjectURL(file);
+    upload_file = file;
     uploaded_image = url;
     document.querySelector("#image_drop_area").style.backgroundImage = `url(${uploaded_image})`;
     // const reader = new FileReader();
