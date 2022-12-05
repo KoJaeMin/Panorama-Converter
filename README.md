@@ -1,6 +1,4 @@
 # Panorama-Converter
-Panorama Converter with SinGAN
-
 
 ## 연구배경
 
