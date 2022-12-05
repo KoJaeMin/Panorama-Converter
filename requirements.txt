@@ -5,3 +5,8 @@ scipy
 numpy
 torch
 torchvision
+fastapi
+uvicorn-standard
+python-multipart
+python-dotenv
+jinja2
