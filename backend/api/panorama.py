@@ -29,7 +29,7 @@ async def training(username : str, password : str, opt_h : int , opt_w :int, img
         ### resize
         output_folder = f'{out}/RandomSamples_ArbitrerySizes/{img.filename[:-4]}/{user_name}'
         default_name = '0.png'
-        img = await Image.open(str(output_folder/default_name))
+        img = Image.open(f"{output_folder}/{default_name}")
         img_resize_lanczos = img.resize((opt_w, opt_h), Image.LANCZOS)
         img_resize_lanczos.save(f'{output_folder}/{img.filename[:-4]}.png')
         return f'{output_folder}/{img.filename[:-4]}.png'
