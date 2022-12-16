@@ -1,35 +1,74 @@
-from fastapi import APIRouter, File, Form, UploadFile
+from typing import Union
+from fastapi import APIRouter, File, Form, UploadFile, BackgroundTasks
 from fastapi.responses import FileResponse
-from core.train import trainer
+from core.train import trainer, getimage
 from core.make import make
 from dotenv import load_dotenv
 import os
 from PIL import Image
-# from core.utils import save
+from datatype.panorama import CheckModel, MakingModel, ResponseModel
 
 load_dotenv()
 router = APIRouter()
 
-@router.post("/img",response_class=FileResponse)
-async def training(username : str, password : str, opt_h : int , opt_w :int, img: UploadFile = File()):
-    if password == os.environ['PW']:
-        user_name = f"{img.filename[:-4]}{username}"
-        input_dir = str(os.environ['INPUT_DIR'])
-        out=str(os.environ['OUTPUT_DIR'])
-        trainmodel_dir = str(os.environ['TRAINEDMOEDL_DIR'])
-        ### Input file 저장
-        with open(f"{input_dir}/{img.filename}", 'wb') as image:
-            content = await img.read()
-            image.write(content)
-            image.close()
-        ### train
-        trainer(input_name = img.filename,input_dir = input_dir,out=out, trainmodel_dir = trainmodel_dir, user_name = user_name)
-        ### make
-        make(height = opt_h, width = opt_w ,input_name =img.filename,input_dir = input_dir,out=out, trainmodel_dir = trainmodel_dir, user_name = user_name)
-        ### resize
-        output_folder = f'{out}/RandomSamples_ArbitrerySizes/{img.filename[:-4]}/{user_name}'
-        default_name = '0.png'
-        img = Image.open(f"{output_folder}/{default_name}")
-        img_resize_lanczos = img.resize((opt_w, opt_h), Image.LANCZOS)
-        img_resize_lanczos.save(f'{output_folder}/{img.filename[:-4]}.png')
-        return f'{output_folder}/{img.filename[:-4]}.png'
+### global variable
+input_dir = str(os.environ['INPUT_DIR'])
+trainmodel_dir = str(os.environ['TRAIN_DIR'])
+out = str(os.environ['OUTPUT_DIR'])
+pw = os.environ['PW']
+
+@router.post("/training", response_model = ResponseModel)
+async def training(username : str, password : str, background_tasks: BackgroundTasks, img: UploadFile = File()):
+    global pw
+    global input_dir
+    global trainmodel_dir
+    global out
+    if password != pw:
+        return {403, "Password is Incorrect."}
+    user_name = f"{img.filename[:-4]}{username}"
+    ### Input file 저장
+    getimage(f"{input_dir}/{img.filename}")
+    ### train
+    background_tasks.add_task(trainer, input_name = img.filename ,input_dir = input_dir,trainmodel_dir = trainmodel_dir, out=out,  user_name = user_name)
+    return {202, "Start training..."}
+
+
+@router.post("/check", response_model = ResponseModel)
+async def check(checkmodel : CheckModel):
+    global pw
+    global input_dir
+    global trainmodel_dir
+    global out
+    if checkmodel.password != pw:
+        return {403, "Password is Incorrect."}
+    # return {"message" : }
+        # user_name = f"{img.filename[:-4]}{username}"
+        # ### make
+        # make(height = opt_h, width = opt_w ,input_name =img,input_dir = input_dir,trainmodel_dir = trainmodel_dir,out=out,  user_name = user_name)
+        # ### resize
+        # output_folder = f'{out}/RandomSamples_ArbitrerySizes/{img.filename[:-4]}/{user_name}'
+        # default_name = '0.png'
+        # image = Image.open(f"{output_folder}/{default_name}")
+        # img_resize_lanczos = image.resize((opt_w, opt_h), Image.LANCZOS)
+        # img_resize_lanczos.save(f'{output_folder}/{img.filename[:-4]}.png')
+        # return f'{output_folder}/{img.filename[:-4]}.png'
+
+# @router.get("/making", response_class=FileResponse)
+@router.post("/making")
+async def making(makingmodel : MakingModel):
+    global pw
+    global input_dir
+    global trainmodel_dir
+    global out
+    if makingmodel.password != pw:
+        return {403, "Password is Incorrect."}
+        # user_name = f"{img.filename[:-4]}{username}"
+        # ### make
+        # make(height = opt_h, width = opt_w ,input_name =img,input_dir = input_dir,trainmodel_dir = trainmodel_dir,out=out,  user_name = user_name)
+        # ### resize
+        # output_folder = f'{out}/RandomSamples_ArbitrerySizes/{img.filename[:-4]}/{user_name}'
+        # default_name = '0.png'
+        # image = Image.open(f"{output_folder}/{default_name}")
+        # img_resize_lanczos = image.resize((opt_w, opt_h), Image.LANCZOS)
+        # img_resize_lanczos.save(f'{output_folder}/{img.filename[:-4]}.png')
+        # return f'{output_folder}/{img.filename[:-4]}.png'
