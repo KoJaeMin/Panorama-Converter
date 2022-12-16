@@ -19,7 +19,7 @@ load_dotenv()
     # SQLALCHEMY_DATABASE_URI: Optional[PostgresDsn] = None
     
 class DefaultSetting():
-    def __init__(self,input_name : str, input_dir : str, out : str, trainmodel_dir : str,user_name : str = ''):
+    def __init__(self,input_name : str, input_dir : str,trainmodel_dir : str, out : str, user_name : str = ''):
         #workspace:
         self.not_cuda : int = 0 ### action = 'store_true', help = 'disables cuda'
 
@@ -59,19 +59,19 @@ class DefaultSetting():
         self.Dsteps : int = 3 ### help='Discriminator inner steps'
         self.lambda_grad : float = 0.1 ### help='gradient penelty weight'
         self.alpha : float = 10 ### help='reconstruction loss weight'
-        self.optimizer : str = 'Adam' ### help='optimizer : [Adam(default)|AdamW|Adamax|NAdam|RAdam]'
+        self.optimizer : str = 'AdamW' ### help='optimizer : [AdamW(default)|Adam|Adamax|NAdam|RAdam]'
 
 
 class TrainingSetting(DefaultSetting):
-    def __init__(self, input_name : str, input_dir : str, out : str, trainmodel_dir : str,user_name : str = ''):
+    def __init__(self, input_name : str, input_dir : str,trainmodel_dir :str, out : str,user_name : str = ''):
         # super().__init__(input_name = self.input_name,input_dir = self.input_dir,out=self.out, trainmodel_dir = self.trainmodel_dir, user_name = self.user_name)
-        super().__init__(input_name,input_dir,out,trainmodel_dir,user_name)
+        super().__init__(input_name,input_dir,trainmodel_dir,out,user_name)
         self.mode = 'train'
 
 class MakingSetting(DefaultSetting):
-    def __init__(self, height : int, width : int ,input_name : str, input_dir : str, out : str, trainmodel_dir : str,user_name : str = ''):
+    def __init__(self, height : int, width : int ,input_name : str, input_dir : str,trainmodel_dir : str, out : str,user_name : str = ''):
         # super().__init__(input_name = self.input_name,input_dir = self.input_dir,out=self.out, trainmodel_dir = self.trainmodel_dir, user_name = self.user_name)
-        super().__init__(input_name,input_dir,out,trainmodel_dir,user_name)
+        super().__init__(input_name,input_dir,trainmodel_dir,out,user_name)
         self.mode : str = 'random_samples_arbitrary_sizes'
         self.gen_start_scale : int = 0 ### help='generation start scale'
         self.height : int = height
