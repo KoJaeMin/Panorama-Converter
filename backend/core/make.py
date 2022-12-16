@@ -4,8 +4,8 @@ from core.SinGAN.training import *
 from core.SinGAN.imresize import imresize
 import core.SinGAN.functions as functions
 
-def make(height : int, width : int ,input_name : str, input_dir : str, out : str, trainmodel_dir : str,user_name : str = ''):
-    opt = MakingSetting(height = height, width = width ,input_name =input_name,input_dir =input_dir, out = out, trainmodel_dir =trainmodel_dir,user_name = user_name)
+def make(height : int, width : int ,input_name : str, input_dir : str,trainmodel_dir: str, out : str,user_name : str = ''):
+    opt = MakingSetting(height = height, width = width ,input_name =input_name,input_dir =input_dir, trainmodel_dir = trainmodel_dir, out = out,user_name = user_name)
     opt = functions.post_config(opt)
     Gs = []
     Zs = []

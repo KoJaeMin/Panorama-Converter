@@ -3,8 +3,8 @@ from core.SinGAN.manipulate import *
 from core.SinGAN.training import *
 import core.SinGAN.functions as functions
 
-def trainer(input_name : str, input_dir : str, out : str, trainmodel_dir : str,user_name : str = ''):
-    opt = TrainingSetting(input_name = input_name,input_dir = input_dir,out=out, trainmodel_dir = trainmodel_dir, user_name = user_name)
+def trainer(input_name : str, input_dir : str,trainmodel_dir : str, out : str,user_name : str = ''):
+    opt = TrainingSetting(input_name = input_name,input_dir = input_dir,trainmodel_dir = trainmodel_dir,out=out, user_name = user_name)
     opt = functions.post_config(opt)
     Gs = []
     Zs = []
@@ -25,3 +25,9 @@ def trainer(input_name : str, input_dir : str, out : str, trainmodel_dir : str,u
         functions.adjust_scales2image(real, opt)
         train(opt, Gs, Zs, reals, NoiseAmp)
         SinGAN_generate(Gs,Zs,reals,NoiseAmp,opt)
+
+
+def getimage(imagefile : str) -> None :
+    with open(imagefile, 'wb') as image:
+        content = img.read()
+        image.write(content)
