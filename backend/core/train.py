@@ -25,9 +25,3 @@ def trainer(input_name : str, input_dir : str,trainmodel_dir : str, out : str,us
         functions.adjust_scales2image(real, opt)
         train(opt, Gs, Zs, reals, NoiseAmp)
         SinGAN_generate(Gs,Zs,reals,NoiseAmp,opt)
-
-
-def getimage(imagefile : str) -> None :
-    with open(imagefile, 'wb') as image:
-        content = img.read()
-        image.write(content)

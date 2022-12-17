@@ -1,7 +1,8 @@
 from typing import Union
 from fastapi import APIRouter, File, Form, UploadFile, BackgroundTasks
 from fastapi.responses import FileResponse
-from core.train import trainer, getimage
+from core.train import trainer
+from core.utils import getimage
 from core.make import make
 from dotenv import load_dotenv
 import os
