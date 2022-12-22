@@ -1,10 +1,6 @@
-def getimage(imagefile : str) -> None :
+from fastapi import UploadFile
+
+async def getimage(imagefile : str, img : UploadFile) -> None :
     with open(imagefile, 'wb') as image:
-        content = image.read()
+        content = await img.read()
         image.write(content)
-        
-# def getimage(imagefile : str, img : str) -> None:
-#     with open(imagefile, 'rb') as image:
-#         with open(img, 'wb') as result:
-#             content = image.read()
-#             result.write(content)

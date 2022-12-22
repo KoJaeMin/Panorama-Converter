@@ -7,7 +7,7 @@ from core.make import make
 from dotenv import load_dotenv
 import os
 from PIL import Image
-from datatype.panorama import CheckModel, MakingModel, ResponseModel
+from datatype.panorama import CheckModel, MakingModel, CustomResponseModel
 
 load_dotenv()
 router = APIRouter()
@@ -18,7 +18,7 @@ trainmodel_dir = str(os.environ['TRAIN_DIR'])
 out = str(os.environ['OUTPUT_DIR'])
 pw = os.environ['PW']
 
-@router.post("/training", response_model = ResponseModel)
+@router.post("/training")
 async def training(username : str, password : str, background_tasks: BackgroundTasks, img: UploadFile = File()):
     global pw
     global input_dir
@@ -28,13 +28,13 @@ async def training(username : str, password : str, background_tasks: BackgroundT
         return {403, "Password is Incorrect."}
     user_name = f"{img.filename[:-4]}{username}"
     ### Input file 저장
-    getimage(f"{input_dir}/{img.filename}")
+    await getimage(f"{input_dir}/{img.filename}", img)
     ### train
     background_tasks.add_task(trainer, input_name = img.filename ,input_dir = input_dir,trainmodel_dir = trainmodel_dir, out=out,  user_name = user_name)
     return {202, "Start training..."}
 
 
-@router.post("/check", response_model = ResponseModel)
+@router.post("/check")
 async def check(checkmodel : CheckModel):
     global pw
     global input_dir
