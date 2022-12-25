@@ -53,23 +53,3 @@ class Task:
         
     def IsFinished(self) -> bool:
         return not (self.GetTrainStatus() and self.GetMakeStatus())
-    
-# class TaskQueue:
-#     def __init__(self):
-#         self.queue = []
-        
-#     def AddTask(self):
-#         if(not self.IsQueueEmpty()):
-#             return "It's not Empty."
-#         newTask = Task()
-#         self.queue.append(newTask)
-#         return "Add Complete."
-            
-#     def IsQueueEmpty(self) -> bool:
-#         return len(self.queue) == 0
-    
-#     def DeleteTask(self):
-#         if(self.queue[0].GetTrainStatus() or self.queue[0].GetMakeStatus()):
-#             return "It's Runnig."
-#         self.queue.pop()
-#         return "Delete Complete."
