@@ -51,7 +51,12 @@ async def check(checkmodel : CheckModel):
     if checkmodel.password != pw:
         return {403, "Password is Incorrect."}
     if IsQueueEmpty(TaskQueue):
-        return {403, "Task Queue is Empty."}
+        return {404, "Task Queue is Empty."}
+    if TaskQueue[0].IsFinished():
+        TaskQueue.pop(0)
+        return {200, "Task is done."}
+    return {202, "Task is not done."}
+    
 
 # @router.get("/making", response_class=FileResponse)
 @router.post("/making")
