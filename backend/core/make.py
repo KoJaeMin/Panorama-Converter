@@ -1,4 +1,4 @@
-from core.config import MakingSetting
+from datatype.singan import MakingSetting
 from core.SinGAN.manipulate import *
 from core.SinGAN.training import *
 from core.SinGAN.imresize import imresize

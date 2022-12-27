@@ -1,4 +1,4 @@
-from core.config import TrainingSetting
+from datatype.singan import TrainingSetting
 from core.SinGAN.manipulate import *
 from core.SinGAN.training import *
 import core.SinGAN.functions as functions
