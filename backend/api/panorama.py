@@ -7,7 +7,7 @@ from core.make import make
 from dotenv import load_dotenv
 import os
 from PIL import Image
-from datatype.panorama import CheckModel, MakingModel, Task
+from datatype.api import CheckModel, MakingModel, Task
 
 load_dotenv()
 router = APIRouter()
