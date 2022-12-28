@@ -1,4 +1,5 @@
 from datatype.singan import MakingSetting
+from core.utils import ResizeImg
 from core.SinGAN.manipulate import *
 from core.SinGAN.training import *
 from core.SinGAN.imresize import imresize
@@ -29,3 +30,4 @@ def make(height : int, width : int ,input_name : str, input_dir : str,trainmodel
         Gs, Zs, reals, NoiseAmp = functions.load_trained_pyramid(opt)
         in_s = functions.generate_in2coarsest(reals,opt.scale_v,opt.scale_h,opt)
         SinGAN_generate(Gs, Zs, reals, NoiseAmp, opt, in_s, scale_v=opt.scale_v, scale_h=opt.scale_h)
+        ResizeImg(img_path= '%s/%s.png' % (opt.dir2save, opt.input_name[:-4]) ,height=height, width= width)
