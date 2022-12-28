@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from core.train import trainer
 from core.utils import DownloadImage,IsQueueEmpty
 from core.make import make
+from core.check import *
 from dotenv import load_dotenv
 import os
 from PIL import Image
@@ -16,17 +17,15 @@ router = APIRouter()
 input_dir = str(os.environ['INPUT_DIR'])
 trainmodel_dir = str(os.environ['TRAIN_DIR'])
 out = str(os.environ['OUTPUT_DIR'])
-pw = os.environ['PW']
 TaskQueue = []
 
 @router.post("/training")
 async def training(height : int , width : int, username : str, password : str, background_tasks: BackgroundTasks, img: UploadFile = File()):
-    global pw
     global input_dir
     global trainmodel_dir
     global out
     global TaskQueue
-    if password != pw:
+    if CheckPassWord(password):
         return {403, "Password is Incorrect."}
     ### Input file 저장
     await DownloadImage(f"{input_dir}/{img.filename}", img)
@@ -42,12 +41,11 @@ async def training(height : int , width : int, username : str, password : str, b
 
 @router.post("/check")
 async def check(checkmodel : CheckModel):
-    global pw
     global input_dir
     global trainmodel_dir
     global out
     global TaskQueue
-    if checkmodel.password != pw:
+    if CheckPassWord(checkmodel.password):
         return {403, "Password is Incorrect."}
     if IsQueueEmpty(TaskQueue):
         return {404, "Task Queue is Empty."}
@@ -58,11 +56,15 @@ async def check(checkmodel : CheckModel):
     
 
 # @router.get("/making", response_class=FileResponse)
-@router.post("/making")
-async def making(makingmodel : MakingModel):
-    global pw
+@router.post("/download")
+async def download(filename: str, username : str, password : str):
     global input_dir
     global trainmodel_dir
     global out
-    if makingmodel.password != pw:
+    if CheckPassWord(password):
         return {403, "Password is Incorrect."}
+    file_halfname = filename[:-4]
+    result_path = '%s/RandomSamples_ArbitrerySizes/%s/%s/%s.png' % (out,file_halfname, username, file_halfname)
+    if CheckExist(result_path):
+        return FileResponse(file_halfname)
+    return {404, "File is not Exist."}
