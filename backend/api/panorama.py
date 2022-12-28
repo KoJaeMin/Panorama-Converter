@@ -28,13 +28,12 @@ async def training(height : int , width : int, username : str, password : str, b
     global TaskQueue
     if password != pw:
         return {403, "Password is Incorrect."}
-    user_name = f"{img.filename[:-4]}{username}"
     ### Input file 저장
     await DownloadImage(f"{input_dir}/{img.filename}", img)
     if(not IsQueueEmpty(TaskQueue)):
         return {403, "Task Queue is full."}
     ### Generate Task
-    newTask = Task(height=height, width= width, input_name=img.filename, input_dir=input_dir, trainmodel_dir=trainmodel_dir, out=out,user_name=user_name)
+    newTask = Task(height=height, width= width, input_name=img.filename, input_dir=input_dir, trainmodel_dir=trainmodel_dir, out=out,user_name=username)
     TaskQueue.append(newTask)
     ### Start Task
     background_tasks.add_task(newTask.StartTask)
