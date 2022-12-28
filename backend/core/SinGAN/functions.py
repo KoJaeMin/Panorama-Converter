@@ -254,19 +254,19 @@ def generate_in2coarsest(reals,scale_v,scale_h,opt):
 def generate_dir2save(opt):
     dir2save = None
     if (opt.mode == 'train') | (opt.mode == 'SR_train'):
-        dir2save = '%s/%s/%s/scale_factor=%f,alpha=%d' % (opt.trainmodel_dir,opt.input_name[:-4],opt.name, opt.scale_factor_init,opt.alpha)
+        dir2save = '%s/%s/%s' % (opt.trainmodel_dir,opt.input_name[:-4],opt.user_name)
     elif (opt.mode == 'animation_train') :
-        dir2save = '%s/%s/%s/scale_factor=%f_noise_padding' % (opt.trainmodel_dir,opt.input_name[:-4],opt.name, opt.scale_factor_init)
+        dir2save = '%s/%s/%s/scale_factor=%f_noise_padding' % (opt.trainmodel_dir,opt.input_name[:-4],opt.user_name, opt.scale_factor_init)
     elif (opt.mode == 'paint_train') :
-        dir2save = '%s/%s/%s/scale_factor=%f_paint/start_scale=%d' % (opt.trainmodel_dir,opt.input_name[:-4],opt.name, opt.scale_factor_init,opt.paint_start_scale)
+        dir2save = '%s/%s/%s/scale_factor=%f_paint/start_scale=%d' % (opt.trainmodel_dir,opt.input_name[:-4],opt.user_name, opt.scale_factor_init,opt.paint_start_scale)
     elif opt.mode == 'random_samples':
-        dir2save = '%s/RandomSamples/%s/%s/gen_start_scale=%d' % (opt.out,opt.input_name[:-4],opt.name, opt.gen_start_scale)
+        dir2save = '%s/RandomSamples/%s/%s/gen_start_scale=%d' % (opt.out,opt.input_name[:-4],opt.user_name, opt.gen_start_scale)
     elif opt.mode == 'random_samples_arbitrary_sizes':
-        dir2save = '%s/RandomSamples_ArbitrerySizes/%s/%s' % (opt.out,opt.input_name[:-4],opt.name)
+        dir2save = '%s/RandomSamples_ArbitrerySizes/%s/%s' % (opt.out,opt.input_name[:-4],opt.user_name)
     elif opt.mode == 'animation':
-        dir2save = '%s/Animation/%s/%s' % (opt.out, opt.input_name[:-4],opt.name)
+        dir2save = '%s/Animation/%s/%s' % (opt.out, opt.input_name[:-4],opt.user_name)
     elif opt.mode == 'SR':
-        dir2save = '%s/SR/%s/%s' % (opt.out, opt.sr_factor,opt.name)
+        dir2save = '%s/SR/%s/%s' % (opt.out, opt.sr_factor,opt.user_name)
     elif opt.mode == 'harmonization':
         dir2save = '%s/Harmonization/%s/%s/%s_out' % (opt.out,opt.input_name[:-4], opt.name,opt.ref_name[:-4])
     elif opt.mode == 'editing':
@@ -274,7 +274,7 @@ def generate_dir2save(opt):
     elif opt.mode == 'paint2image':
         dir2save = '%s/Paint2image/%s/%s/%s_out' % (opt.out,opt.input_name[:-4], opt.name,opt.ref_name[:-4])
         if opt.quantization_flag:
-            dir2save = '%s/%s_quantized' % (dir2save,opt.name)
+            dir2save = '%s/%s_quantized' % (dir2save,opt.user_name)
     return dir2save
 
 def post_config(opt):
