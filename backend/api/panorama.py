@@ -27,6 +27,8 @@ async def training(height : int , width : int, username : str, password : str, b
     global TaskQueue
     if CheckPassWord(password):
         return {403, "Password is Incorrect."}
+    if height < 0 or width < 0:
+        return {403, "Error : Please enter positive integer"}
     ### Input file 저장
     await DownloadImage(f"{input_dir}/{img.filename}", img)
     if(not IsQueueEmpty(TaskQueue)):
