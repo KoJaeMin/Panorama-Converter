@@ -1,22 +1,6 @@
-from pydantic import BaseModel
 from core.train import trainer
 from core.make import make
 
-class BasicModel(BaseModel):
-    username : str
-    password : str
-    filename : str
-
-class CheckModel(BasicModel):
-    count : int
-
-class MakingModel(BasicModel):
-    opt_h : int
-    opt_w : int
-
-class ResponseModel(BaseModel):
-    status : int
-    message : str
     
 class Task:
     def __init__(self, height : int, width : int ,input_name : str, input_dir : str,trainmodel_dir: str, out : str, user_name : str = '0000'):
