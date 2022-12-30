@@ -1,5 +1,5 @@
 from typing import Union
-from fastapi import APIRouter, File, Form, UploadFile, BackgroundTasks
+from fastapi import APIRouter, File, Form, UploadFile, BackgroundTasks, Response, status
 from fastapi.responses import FileResponse
 from core.train import trainer
 from core.utils import DownloadImage,IsQueueEmpty
@@ -8,7 +8,7 @@ from core.check import *
 from dotenv import load_dotenv
 import os
 from PIL import Image
-from datatype.api import CheckModel, MakingModel, Task
+from datatype.api import Task
 
 load_dotenv()
 router = APIRouter()
@@ -19,54 +19,62 @@ trainmodel_dir = str(os.environ['TRAIN_DIR'])
 out = str(os.environ['OUTPUT_DIR'])
 TaskQueue = []
 
-@router.post("/training")
-async def training(height : int , width : int, username : str, password : str, background_tasks: BackgroundTasks, img: UploadFile = File()):
+@router.post("/training", status_code = 201)
+async def training(height : int , width : int, username : str, password : str, response: Response, background_tasks: BackgroundTasks, img: UploadFile = File()):
     global input_dir
     global trainmodel_dir
     global out
     global TaskQueue
     if not CheckPassWord(password):
-        return {403, "Password is Incorrect."}
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {"message": "Password is Incorrect."}
     if height < 0 or width < 0:
-        return {403, "Error : Please enter positive integer"}
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {"message": "Error : Please enter positive integer"}
     ### Input file 저장
     await DownloadImage(f"{input_dir}/{img.filename}", img)
     if(not IsQueueEmpty(TaskQueue)):
-        return {403, "Task Queue is full."}
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {"message": "Task Queue is full."}
     ### Generate Task
     newTask = Task(height=height, width= width, input_name=img.filename, input_dir=input_dir, trainmodel_dir=trainmodel_dir, out=out,user_name=username)
     TaskQueue.append(newTask)
     ### Start Task
     background_tasks.add_task(newTask.StartTask)
-    return {202, "Start Task."}
+    return {"message": "Start Task."}
 
 
-@router.post("/check")
-async def check(checkmodel : CheckModel):
+@router.get("/check", status_code = 202)
+async def check(username : str, password : str, response: Response):
     global input_dir
     global trainmodel_dir
     global out
     global TaskQueue
-    if CheckPassWord(checkmodel.password):
-        return {403, "Password is Incorrect."}
+    if CheckPassWord(password):
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {"message": "Password is Incorrect."}
     if IsQueueEmpty(TaskQueue):
-        return {404, "Task Queue is Empty."}
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"message": "Task Queue is Empty."}
     if TaskQueue[0].IsFinished():
         TaskQueue.pop(0)
-        return {200, "Task is done."}
-    return {202, "Task is not done."}
+        response.status_code = status.HTTP_200_OK
+        return {"message": "Task is done."}
+    return {"message" : "Task is not done."}
     
 
 # @router.get("/making", response_class=FileResponse)
-@router.post("/download")
-async def download(filename: str, username : str, password : str):
+@router.get("/download", status_code = 200)
+async def download(filename: str, username : str, password : str,response: Response):
     global input_dir
     global trainmodel_dir
     global out
     if CheckPassWord(password):
-        return {403, "Password is Incorrect."}
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {"message": "Password is Incorrect."}
     file_halfname = filename[:-4]
     result_path = '%s/RandomSamples_ArbitrerySizes/%s/%s/%s.png' % (out,file_halfname, username, file_halfname)
-    if CheckExist(result_path):
-        return FileResponse(file_halfname)
-    return {404, "File is not Exist."}
+    if not CheckExist(result_path):
+        response.status_code = status.HTTP_404_NOT_FOUND
+        return {"message": "File is not Exist."}
+    return FileResponse(file_halfname)
