@@ -1,6 +1,16 @@
 function submit(url){
-    const height = parseInt(document.getElementById('height').value);
-    const width = parseInt(document.getElementById('width').value);
+    let height = document.getElementById('height').value;
+    let width = document.getElementById('width').value;
+    if(!Number.isInteger(height) || !Number.isInteger(width)){
+        alert("Please enter integers!")
+        return;
+    }
+    height = parseInt(height);
+    width = parseInt(width);
+    if(height < 0 || width < 0){
+        alert("Please enter positive numbers!")
+        return;
+    }
     const password = document.getElementById('password').value;
     const username = String(Math.floor(Math.random() * Math.sqrt(height * width))).padStart(4,0);
     const index = upload_file.name.indexOf('.');
