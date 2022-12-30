@@ -25,7 +25,7 @@ async def training(height : int , width : int, username : str, password : str, b
     global trainmodel_dir
     global out
     global TaskQueue
-    if CheckPassWord(password):
+    if not CheckPassWord(password):
         return {403, "Password is Incorrect."}
     if height < 0 or width < 0:
         return {403, "Error : Please enter positive integer"}
