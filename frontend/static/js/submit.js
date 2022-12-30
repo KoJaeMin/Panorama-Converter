@@ -1,4 +1,4 @@
-function submit(url){
+async function submit(url){
     let height = document.getElementById('height').value;
     let width = document.getElementById('width').value;
     if(!Number.isInteger(height) || !Number.isInteger(width)){
@@ -15,19 +15,20 @@ function submit(url){
     const username = String(Math.floor(Math.random() * Math.sqrt(height * width))).padStart(4,0);
     const index = upload_file.name.indexOf('.');
     const filename = upload_file.name.slice(0,index);
-    if(height && width){
-        const image = new FormData();
-        image.append(`img`,upload_file)
-        fetch(`${url}?username=${username}&password=${password}&opt_h=${height}&opt_w=${width}`,{
-            method : "POST",
-            body: image
-        }).then(response=>{
-            response.blob().then(f=>{
-                console.log(f);
-                download(f, filename);
-            })
-        })
-    }
+
+    const image = new FormData();
+    image.append(`img`,upload_file)
+    const train_uri = `${url}?username=${username}&password=${password}&opt_h=${height}&opt_w=${width}`;
+    const TrainResponse = await Training(train_uri,image);
+    // fetch(``,{
+    //     method : "POST",
+    //     body: image
+    // }).then(response=>{
+    //     response.blob().then(f=>{
+    //         console.log(f);
+    //         download(f, filename);
+    //     })
+    // })
 }
 
 function download(image,name){
@@ -40,3 +41,7 @@ function download(image,name){
     link.click();
     document.body.removeChild(link);
 }
+
+const Training = async (uri, img)=> await fetch(uri,{method : 'POST',body : img})
+function Checking(){}
+function GetPanorama(){}
