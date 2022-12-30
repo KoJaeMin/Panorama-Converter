@@ -30,7 +30,7 @@ class DefaultSetting():
         self.nc_z : int = 3 ### help='noise # channels'
         self.nc_im : int = 3 ### help='image # channels'
         self.out : str = out ### help='output folder'
-        self.name : str = user_name ### help='user name'
+        self.user_name : str = user_name ### help='user name'
         self.input_name : str = input_name ### help='input image name'
         self.trainmodel_dir : str = trainmodel_dir ### help='trained model directory'
         self.input_dir : str = input_dir ### help='input image directory' 
