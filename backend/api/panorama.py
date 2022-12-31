@@ -26,10 +26,10 @@ async def training(height : int , width : int, username : str, password : str, r
     global out
     global TaskQueue
     if not CheckPassWord(password):
-        response.status_code = status.HTTP_403_FORBIDDEN
+        response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"message": "Password is Incorrect."}
     if height < 0 or width < 0:
-        response.status_code = status.HTTP_403_FORBIDDEN
+        response.status_code = status.HTTP_406_NOT_ACCEPTABLE
         return {"message": "Error : Please enter positive integer"}
     ### Input file 저장
     await DownloadImage(f"{input_dir}/{img.filename}", img)
@@ -51,10 +51,10 @@ async def check(username : str, password : str, response: Response):
     global out
     global TaskQueue
     if CheckPassWord(password):
-        response.status_code = status.HTTP_403_FORBIDDEN
+        response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"message": "Password is Incorrect."}
     if IsQueueEmpty(TaskQueue):
-        response.status_code = status.HTTP_404_NOT_FOUND
+        response.status_code = status.HTTP_424_FAILED_DEPENDENCY
         return {"message": "Task Queue is Empty."}
     if TaskQueue[0].IsFinished():
         TaskQueue.pop(0)
@@ -63,14 +63,13 @@ async def check(username : str, password : str, response: Response):
     return {"message" : "Task is not done."}
     
 
-# @router.get("/making", response_class=FileResponse)
 @router.get("/download", status_code = 200)
 async def download(filename: str, username : str, password : str,response: Response):
     global input_dir
     global trainmodel_dir
     global out
     if CheckPassWord(password):
-        response.status_code = status.HTTP_403_FORBIDDEN
+        response.status_code = status.HTTP_401_UNAUTHORIZED
         return {"message": "Password is Incorrect."}
     file_halfname = filename[:-4]
     result_path = '%s/RandomSamples_ArbitrerySizes/%s/%s/%s.png' % (out,file_halfname, username, file_halfname)
