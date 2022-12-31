@@ -1,6 +1,6 @@
 async function submit(url){
-    let height = document.getElementById('height').value;
-    let width = document.getElementById('width').value;
+    let height = Number(document.getElementById('height').value);
+    let width = Number(document.getElementById('width').value);
     if(!Number.isInteger(height) || !Number.isInteger(width)){
         alert("Please enter integers!")
         return;
@@ -18,17 +18,11 @@ async function submit(url){
 
     const image = new FormData();
     image.append(`img`,upload_file)
-    const train_uri = `${url}?username=${username}&password=${password}&opt_h=${height}&opt_w=${width}`;
+    ///height : int , width : int, username : str, password : str
+    const train_uri = `${url}?username=${username}&password=${password}&height=${height}&width=${width}`;
     const TrainResponse = await Training(train_uri,image);
-    // fetch(``,{
-    //     method : "POST",
-    //     body: image
-    // }).then(response=>{
-    //     response.blob().then(f=>{
-    //         console.log(f);
-    //         download(f, filename);
-    //     })
-    // })
+    const TrainResponseJSON = await TrainResponse.json();
+    
 }
 
 function download(image,name){
