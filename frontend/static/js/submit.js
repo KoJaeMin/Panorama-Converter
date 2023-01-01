@@ -38,6 +38,6 @@ function downloadImage(image,name){
     document.body.removeChild(link);
 }
 
-const requestForTrain = async (uri, img) => {await fetch(uri,{method : 'POST',body : img})};
+const requestForTrain = async (uri, img) => await fetch(uri,{method : 'POST',body : img});
 const requestForCheck = async () => {};
 const requestForGetPanorama = async () => {};
