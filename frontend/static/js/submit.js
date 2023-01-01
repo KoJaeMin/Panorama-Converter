@@ -1,6 +1,4 @@
 async function submit(url){
-    const DELAY_MILLISECOND = 6000;
-
     let inputImageHeight = Number(document.getElementById('height').value);
     let inputImageWidth = Number(document.getElementById('width').value);
     if(!Number.isInteger(inputImageHeight) || !Number.isInteger(inputImageWidth)){
@@ -57,7 +55,7 @@ const requestForCheck = async (uri) => {
     let count = 0;
     let status = -1;
     const MAXIMUM_COUNT = 100;
-    const INTERVAL_TIMESET = 60 * 1000;
+    const DELAY_MILLISECOND = 60 * 1000;
     let CheckPolling = setInterval(async ()=>{
         const response = await fetch(uri,{method : 'GET'});
         status = response.status;
@@ -71,7 +69,7 @@ const requestForCheck = async (uri) => {
             return;
         }
         count++;
-    },INTERVAL_TIMESET)
+    },DELAY_MILLISECOND)
     return Promise.resolve(status);
 };
 
