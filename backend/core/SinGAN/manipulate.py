@@ -138,7 +138,7 @@ def SinGAN_generate(Gs,Zs,reals,NoiseAmp,opt,in_s=None,scale_v=1,scale_h=1,n=0,g
                 else:
                     opt.dir2save = functions.generate_dir2save(opt)
                 try:
-                    os.makedirs(dir2save)
+                    os.makedirs(opt.dir2save)
                 except OSError:
                     pass
                 if (opt.mode != "harmonization") & (opt.mode != "editing") & (opt.mode != "SR") & (opt.mode != "paint2image"):
